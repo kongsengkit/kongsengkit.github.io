@@ -173,14 +173,6 @@ nav {
 .chart-tooltip .tt-val { font-weight: 600; }
 .chart-tooltip .tt-name { color: rgba(255,255,255,0.6); font-weight: 300; }
 .chart-note { font-size: 0.72rem; color: var(--text-muted); font-weight: 300; margin-top: 0.75rem; padding-bottom: 0.5rem; }
-.chart-table-details { margin-top: 0.25rem; border-top: 1px solid var(--border); padding: 0.75rem 0 0.5rem; }
-.chart-table-details summary { font-size: 0.78rem; color: var(--accent); cursor: pointer; font-weight: 500; padding: 0.35rem 0; }
-.chart-table-wrap { overflow-x: auto; margin-top: 0.75rem; }
-.chart-table { border-collapse: collapse; font-size: 0.75rem; width: 100%; min-width: 480px; }
-.chart-table th, .chart-table td { padding: 0.35rem 0.7rem; border-bottom: 1px solid var(--border); text-align: right; font-variant-numeric: tabular-nums; }
-.chart-table th:first-child, .chart-table td:first-child { text-align: left; }
-.chart-table th { color: var(--navy); font-weight: 600; }
-.chart-table td { color: var(--text-muted); }
 .results-highlights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .highlight-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; }
 .highlight-num { font-size: 1.45rem; font-weight: 600; color: var(--navy); line-height: 1.2; margin-bottom: 0.2rem; }

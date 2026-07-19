@@ -71,24 +71,27 @@ const CHART = (() => {
   }
   const fmt = d => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
 
+  const fmtK = v => (Number.isInteger(v) ? v : v.toFixed(1)) + 'K';
+  const fmtM = v => (v < 1 ? v.toFixed(2) : Number.isInteger(v) ? v : v.toFixed(1)) + 'M';
+  const fmtPos = v => '~' + (Number.isInteger(v) ? v : v.toFixed(1));
   const series = {
     clicks: {
-      name: 'Organic clicks', unit: ' (indexed)', color: '#1a6cf0',
-      title: 'Organic clicks — indexed, Jan 2024 = 100', lowerIsBetter: false,
-      data: [100,120,124,130,121,108,108,135,129,134,123,125,
-             146,126,145,149,135,116,108,130,139,161,150,144,
-             175,167,209,192,226,193]
+      name: 'Organic clicks', color: '#1a6cf0',
+      title: 'Organic clicks per month', lowerIsBetter: false, format: fmtK,
+      data: [12.3,14.8,15.3,16.1,15.0,13.4,13.4,16.6,15.9,16.5,15.2,15.4,
+             18.0,15.6,17.9,18.4,16.7,14.3,13.5,16.1,17.1,19.8,18.5,17.8,
+             21.7,20.7,25.7,23.7,27.8,23.8]
     },
     impressions: {
-      name: 'Impressions', unit: ' (indexed)', color: '#b45309',
-      title: 'Search impressions — indexed, Jan 2024 = 100', lowerIsBetter: false,
-      data: [100,135,145,152,145,122,115,138,162,188,200,218,
-             225,210,260,272,380,365,400,385,320,312,375,478,
-             650,525,750,740,861,620]
+      name: 'Impressions', color: '#b45309',
+      title: 'Search impressions per month', lowerIsBetter: false, format: fmtM,
+      data: [0.95,1.3,1.4,1.45,1.4,1.15,1.1,1.3,1.55,1.8,1.9,2.05,
+             2.1,2.0,2.45,2.6,3.6,3.45,3.8,3.65,3.05,2.95,3.55,4.55,
+             6.1,5.0,7.1,7.05,8.1,5.9]
     },
     position: {
-      name: 'Avg. position', unit: ' (lower is better)', color: '#15803d',
-      title: 'Average search position — lower is better', lowerIsBetter: true,
+      name: 'Avg. position', color: '#15803d',
+      title: 'Average search position — lower is better', lowerIsBetter: true, format: fmtPos,
       data: [35,34,35.5,35,35.5,35.5,38,37,40,41.5,42.5,40,
              33.5,34.5,32,31.5,34.5,29.5,32.5,33,22,12.5,11.5,14.5,
              12.8,11,8.5,9,10.3,11.2]
@@ -155,7 +158,7 @@ const CHART = (() => {
     // Gridlines + y ticks (solid hairlines)
     ticks.forEach(t => {
       svg.appendChild(el('line', { x1: M.left, x2: W - M.right, y1: y(t), y2: y(t), stroke: '#edf1f6', 'stroke-width': 1 }));
-      svg.appendChild(el('text', { x: M.left - 8, y: y(t) + 3.5, 'text-anchor': 'end', 'font-size': 10.5, fill: '#46536b', 'font-family': 'inherit' }, t.toLocaleString()));
+      svg.appendChild(el('text', { x: M.left - 8, y: y(t) + 3.5, 'text-anchor': 'end', 'font-size': 10.5, fill: '#46536b', 'font-family': 'inherit' }, s.lowerIsBetter ? t.toLocaleString() : s.format(t)));
     });
 
     // X ticks: Jan + Jul of each year
@@ -193,7 +196,7 @@ const CHART = (() => {
     svg.appendChild(el('text', {
       x: Math.min(x(peakIdx), W - M.right - 4), y: y(peakVal) + (s.lowerIsBetter ? -8 : -9),
       'text-anchor': 'middle', 'font-size': 12, 'font-weight': 600, fill: '#0a1628', 'font-family': 'inherit'
-    }, (s.lowerIsBetter ? '~' : '') + peakVal.toLocaleString()));
+    }, s.format(peakVal)));
 
     // Crosshair + focus dot (hidden until hover/focus)
     svg.appendChild(el('line', { id: 'crosshair', x1: 0, x2: 0, y1: M.top, y2: M.top + plotH, stroke: '#94a3b8', 'stroke-width': 1, opacity: 0 }));
@@ -235,7 +238,7 @@ const CHART = (() => {
       swatch.style.background = sr.color;
       const val = document.createElement('span');
       val.className = 'tt-val';
-      val.textContent = (key === 'position' ? '~' : '') + sr.data[activeIndex].toLocaleString();
+      val.textContent = sr.format(sr.data[activeIndex]);
       const name = document.createElement('span');
       name.className = 'tt-name';
       name.textContent = sr.name;
@@ -289,30 +292,6 @@ const CHART = (() => {
       render();
     });
   });
-
-  // Data table (the no-hover, screen-reader-friendly twin)
-  const table = document.getElementById('chartTable');
-  if (table) {
-    const thead = document.createElement('thead');
-    const hr = document.createElement('tr');
-    ['Month', 'Organic clicks (idx)', 'Impressions (idx)', 'Avg. position'].forEach((h, i) => {
-      const th = document.createElement('th');
-      th.scope = 'col'; th.textContent = h;
-      hr.appendChild(th);
-    });
-    thead.appendChild(hr);
-    const tbody = document.createElement('tbody');
-    months.forEach((d, i) => {
-      const tr = document.createElement('tr');
-      [fmt(d), series.clicks.data[i].toLocaleString(), series.impressions.data[i].toLocaleString(), '~' + series.position.data[i].toLocaleString()].forEach(v => {
-        const td = document.createElement('td');
-        td.textContent = v;
-        tr.appendChild(td);
-      });
-      tbody.appendChild(tr);
-    });
-    table.append(thead, tbody);
-  }
 
   window.addEventListener('resize', hide, { passive: true });
   render();

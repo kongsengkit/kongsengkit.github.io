@@ -311,6 +311,47 @@ const CHART = (() => {
   return { render };
 })();
 
+/* ── Samples carousel ── */
+const sampleTrack = document.getElementById('articleGrid');
+const carouselControls = document.getElementById('carouselControls');
+const samplesPrev = document.getElementById('samplesPrev');
+const samplesNext = document.getElementById('samplesNext');
+const carouselStatus = document.getElementById('carouselStatus');
+
+const visibleCards = () => Array.from(sampleTrack.querySelectorAll('.article-card:not(.hidden-card)'));
+function cardStep() {
+  const cards = visibleCards();
+  return cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : sampleTrack.clientWidth;
+}
+function perView() { return Math.max(1, Math.round(sampleTrack.clientWidth / cardStep())); }
+
+function updateCarousel() {
+  const max = sampleTrack.scrollWidth - sampleTrack.clientWidth;
+  const cards = visibleCards();
+  samplesPrev.disabled = sampleTrack.scrollLeft <= 2;
+  samplesNext.disabled = sampleTrack.scrollLeft >= max - 2;
+  carouselControls.classList.toggle('is-static', max <= 2);
+  if (!cards.length) { carouselStatus.textContent = ''; return; }
+  const first = Math.min(cards.length - 1, Math.round(sampleTrack.scrollLeft / cardStep()));
+  const last = Math.min(cards.length, first + perView());
+  carouselStatus.textContent = (last - first > 1 ? `${first + 1}–${last}` : `${first + 1}`) + ` of ${cards.length}`;
+}
+function scrollSamples(dir) {
+  sampleTrack.scrollBy({ left: dir * cardStep() * perView(), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+}
+if (sampleTrack) {
+  samplesPrev.addEventListener('click', () => scrollSamples(-1));
+  samplesNext.addEventListener('click', () => scrollSamples(1));
+  let carouselFrame = null;
+  const scheduleUpdate = () => {
+    if (carouselFrame) return;
+    carouselFrame = requestAnimationFrame(() => { carouselFrame = null; updateCarousel(); });
+  };
+  sampleTrack.addEventListener('scroll', scheduleUpdate, { passive: true });
+  window.addEventListener('resize', scheduleUpdate, { passive: true });
+  updateCarousel();
+}
+
 /* ── Sample filters ── */
 const filterBtns = document.querySelectorAll('.filter-btn');
 function applyFilter(cat) {
@@ -319,6 +360,8 @@ function applyFilter(cat) {
     const show = cat === 'all' || card.dataset.category === cat;
     card.classList.toggle('hidden-card', !show);
   });
+  sampleTrack.scrollTo({ left: 0, behavior: 'auto' });
+  updateCarousel();
 }
 filterBtns.forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
 
@@ -374,7 +417,8 @@ function jumpToCard(id) {
   if (!target) return;
   document.querySelectorAll('.article-card').forEach(c => c.classList.remove('highlighted'));
   target.classList.add('highlighted');
-  target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' });
+  sampleTrack.scrollTo({ left: target.offsetLeft - parseFloat(getComputedStyle(sampleTrack).paddingLeft), behavior: 'auto' });
+  target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center', inline: 'nearest' });
   setTimeout(() => target.classList.remove('highlighted'), 3500);
 }
 function resetQuiz() { quizAnswers = []; currentStep = 0; renderQuiz(); }
@@ -394,7 +438,7 @@ spySections.forEach(s => spyObserver.observe(s));
 
 /* ── Fade-in on scroll ── */
 if (!prefersReducedMotion) {
-  document.querySelectorAll('.timeline-item, .article-card, .system-card, .highlight-card, .skills-grid > div, .stat-item').forEach(el => {
+  document.querySelectorAll('.timeline-item, .article-grid, .system-card, .highlight-card, .skills-grid > div, .stat-item, .hero-card').forEach(el => {
     el.classList.add('fade-in');
     const group = el.closest('.stats-bar-inner, .article-grid, .skills-grid, .systems-grid, .results-highlights');
     if (group) {

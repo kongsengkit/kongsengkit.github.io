@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230a1628'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia,serif' font-size='18' font-weight='700' fill='%231a6cf0'>K</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -60,6 +60,7 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
+    <div class="hero-main">
     <div class="hero-tag">SEO &amp; Content · AI Content Systems</div>
     <h1 class="hero-name">Kong Seng Kit</h1>
     <div class="hero-title"><span id="typedText">Assistant Content Marketing Manager</span><span class="typing-cursor" aria-hidden="true"></span></div>
@@ -76,6 +77,17 @@
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
       <a href="#contact" class="btn-ghost">Contact me</a>
     </div>
+    </div>
+    <aside class="hero-card" aria-label="Profile snapshot">
+      <div class="hero-card-status">Open to new roles</div>
+      <dl class="hero-facts">
+        <div><dt>Currently</dt><dd>Assistant Content Marketing Manager, Vantage</dd></div>
+        <div><dt>Based in</dt><dd>Kuala Lumpur, Malaysia</dd></div>
+        <div><dt>Focus</dt><dd>SEO strategy · Technical SEO · AI content systems</dd></div>
+        <div><dt>Builds with</dt><dd>Claude Code · Codex · Python · BigQuery · Next.js</dd></div>
+        <div><dt>Looking for</dt><dd>Senior content, SEO and AI content roles</dd></div>
+      </dl>
+    </aside>
   </div>
   <div class="scroll-indicator" aria-hidden="true">
     <span>Scroll</span>
@@ -112,6 +124,7 @@
     <h2 class="section-title">Organic Clicks Doubled in Under Five Months</h2>
     <p class="section-sub">Daily Google Search Console data from BigQuery for Vantage's APAC regional Academy: the /academy/ section on 10 APAC sites, covering English, Vietnamese, Thai, Traditional and Simplified Chinese, Malay, Indonesian, Korean, South Africa and the APAC regional domain (Japan excluded). Each point is one week, averaged per day.</p>
 
+    <div class="results-layout">
     <div class="chart-card">
       <div class="chart-head">
         <div>
@@ -148,6 +161,7 @@
         <div class="highlight-label">Of clicks come from non-branded searches: readers finding the content, not people already looking for Vantage.</div>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
@@ -160,13 +174,17 @@
     <div class="systems-grid">
 
       <div class="system-card system-card-wide">
+        <div class="system-main">
         <div class="system-type">Featured project · Vantage Academy</div>
         <h3 class="system-title">Content SEO Operations Platform</h3>
         <div class="system-metric">Academy impact: clicks roughly doubled in five months · 3,300+ queries on page one · the brand's highest-traffic content clusters</div>
+        </div>
+        <div class="system-body">
         <p class="system-desc">Designed and built the platform that runs Vantage Academy: 3,700+ articles across 19 markets, managed in one place instead of spreadsheets. It turns Search Console data into a weekly worklist (refresh, quick win, prune, content gap) and drafts optimisations through an AI skill pipeline with fact-checking rules built in.</p>
         <p class="system-desc">Nothing goes live on its own: once a draft clears manual review and, where required, Compliance sign-off, one click publishes it to WordPress in place of manual posting. Every change is confirmed on the live page and can be undone. Backed by 2,300+ automated tests and checks that trace every figure on screen to its source.</p>
         <div class="system-tags">
           <span class="tag">Python</span><span class="tag">PostgreSQL</span><span class="tag">Next.js</span><span class="tag">BigQuery</span><span class="tag">WordPress API</span><span class="tag">Claude Code</span><span class="tag">Codex</span>
+        </div>
         </div>
       </div>
 
@@ -288,15 +306,21 @@
 <!-- SAMPLES -->
 <section class="articles-section" id="samples">
   <div class="section-inner">
+    <div class="samples-head">
+    <div>
     <div class="section-tag">Writing samples</div>
     <h2 class="section-title">Selected Work Across Formats</h2>
     <p class="section-sub">SEO articles, market analysis, visual content, and production work across trading, macroeconomic themes, and financial services.</p>
 
+    </div>
     <div class="quiz-wrap">
       <span class="quiz-intro-label">Not sure where to start?</span>
       <p class="quiz-intro-sub">Answer 3 quick questions and I'll point you to the most relevant sample.</p>
       <div id="quizContainer" class="quiz-container"></div>
     </div>
+    </div>
+
+    <div class="samples-toolbar">
 
     <div class="filter-row" role="group" aria-label="Filter samples by category">
       <button class="filter-btn" data-filter="all" aria-pressed="true">All<span class="filter-count">8</span></button>
@@ -304,8 +328,16 @@
       <button class="filter-btn" data-filter="education" aria-pressed="false">Trading education<span class="filter-count">2</span></button>
       <button class="filter-btn" data-filter="production" aria-pressed="false">Visual &amp; production<span class="filter-count">3</span></button>
     </div>
+    <div class="carousel-controls" id="carouselControls">
+      <span class="carousel-status" id="carouselStatus" aria-live="polite"></span>
+      <button class="carousel-btn" id="samplesPrev" aria-label="Previous samples" aria-controls="articleGrid">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <button class="carousel-btn" id="samplesNext" aria-label="Next samples" aria-controls="articleGrid">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+    </div>
 
-    <div class="article-grid" id="articleGrid">
+    <div class="article-grid" id="articleGrid" role="region" aria-label="Writing samples, scroll sideways for more" tabindex="0">
 
       <div class="article-card" id="sample-hormuz" data-category="market">
         <div class="article-type">News-Responsive SEO</div>
@@ -508,6 +540,6 @@
   <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
-<script src="script.js?v=3"></script>
+<script src="script.js?v=4"></script>
 </body>
 </html>
